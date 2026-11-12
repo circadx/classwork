@@ -246,10 +246,13 @@ Mtx::Mtx(size_t m, size_t n, const Ints &data):
 }
 
 Mtx Mtx::sum(Mtx const& rhs) const {
+  if (m != rhs.m || n != rhs.n) {
+    throw std::invalid_argument("Wrong matrix size");
+  }
   Mtx result(m, n);
   for (size_t i = 0; i < data_mtx.getSize(); i++) {
-    if ((rhs.data_mtx.get(i) > 0 && data_mtx.get(i) > std::numeric_limits< int >::max() - rhs.data_mtx.get(i) ||
-        (rhs.data_mtx.get(i) < 0 && data_mtx.get(i) < std::numeric_limits< int >::min() - rhs.data_mtx.get(i)) {
+    if ((rhs.data_mtx.get(i) > 0 && data_mtx.get(i) > std::numeric_limits< int >::max() - rhs.data_mtx.get(i)) ||
+        (rhs.data_mtx.get(i) < 0 && data_mtx.get(i) < std::numeric_limits< int >::min() - rhs.data_mtx.get(i))) {
       throw std::logic_error("Overflow");
     }
     result.data_mtx.set(i, data_mtx.get(i) + rhs.data_mtx.get(i));
